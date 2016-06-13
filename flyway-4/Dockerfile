@@ -16,7 +16,7 @@ RUN mkdir /opt \
     && mv /opt/flyway-${FLYWAY_VERSION} /opt/flyway \
     && sed -i 's/bash/sh/' /opt/flyway/flyway \
     && echo "flyway.locations=filesystem:${FLYWAY_SQL_DIR}" > /opt/flyway/conf/flyway.conf \
-    && echo "flyway.encoding=UTF-8" >> /opt/flyway/conf/flyway.conf \
+    && echo "flyway.encoding=UTF-8" >> /opt/flyway/conf/flyway.conf
 
 COPY flyway.sh /opt/flyway/flyway
 
