@@ -26,4 +26,6 @@ MAINTAINER Eric Mann
 
 ENTRYPOINT ["/opt/flyway/flyway"]
 
+WORKDIR /data
+
 CMD ["info"]
