@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2016 Tozny, LLC
 
-FROM tozny/java:latest
+FROM tozny/docker-java:latest
 
 ENV FLYWAY_VERSION 4.0.2
 ENV FLYWAY_SQL_DIR /sql
