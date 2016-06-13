@@ -1,20 +1,29 @@
 # Dockerfile written by Eric Mann <eric@tozny.com>
 #
-# Work derived from ShouldBee
 # Copyright (c) 2016 Tozny, LLC
 
 FROM tozny/java:latest
 
-ADD http://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/4.0.2/flyway-commandline-4.0.2.zip /flyway.zip
+ENV FLYWAY_VERSION 4.0.2
+ENV FLYWAY_SQL_DIR /sql
 
-RUN unzip /flyway.zip \
-    && rm /flyway.zip \
-    && mv /flyway-4.0.2 /flyway \
-    && ln -s /flyway/flyway /usr/local/bin/flyway
+RUN apk update && apk add --update wget ca-certificates && update-ca-certificates
 
-# A simple testing
-RUN flyway 2>&1 | grep "Flyway 4.0.2"
+RUN mkdir /opt \
+    && wget https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${FLYWAY_VERSION}/flyway-commandline-${FLYWAY_VERSION}.zip \
+    && unzip flyway-commandline-${FLYWAY_VERSION}.zip -d /opt \
+    && mv /opt/flyway-${FLYWAY_VERSION} /opt/flyway \
+    && sed -i 's/bash/sh/' /opt/flyway/flyway \
+    && echo "flyway.locations=filesystem:${FLYWAY_SQL_DIR}" > /opt/flyway/conf/flyway.conf \
+    && echo "flyway.encoding=UTF-8" >> /opt/flyway/conf/flyway.conf
 
-WORKDIR /flyway
-ENTRYPOINT ["flyway"]
-CMD ["--help"]
+COPY flyway.sh /opt/flyway/flyway
+
+# Default location for sql migrations
+VOLUME /sql
+
+MAINTAINER Eric Mann
+
+ENTRYPOINT ["/opt/flyway/flyway"]
+
+CMD ["info"]
