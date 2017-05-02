@@ -21,7 +21,7 @@ RUN mkdir /opt \
 COPY flyway.sh /opt/flyway/flyway
 
 # Make flyway executable
-RUN ln -s /opt/flyway/flyway /usr/local/bin/flyway
+RUN ln -s /opt/flyway/flyway /usr/local/bin/flyway && chmod +x /opt/flyway/flyway
 
 # Default location for sql migrations
 VOLUME /sql
